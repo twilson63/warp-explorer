@@ -4,7 +4,7 @@
   import Transition from "./components/transition.svelte";
 
   import Home from "./pages/home.svelte";
-  import About from "./pages/about.svelte";
+  import Write from "./pages/write.svelte";
 
   router.mode.hash();
   router.subscribe((_) => window.scrollTo(0, 0));
@@ -15,7 +15,13 @@
   <Route path="/">
     <Home />
   </Route>
-  <Route path="/about">
-    <About />
+  <Route path="/read/:contractID" let:meta>
+    <Home contractID={meta.params.contractID} />
+  </Route>
+  <Route path="/write/:contractID" let:meta>
+    <Write contractID={meta.params.contractID} />
+  </Route>
+  <Route path="/write">
+    <Write />
   </Route>
 </Transition>
