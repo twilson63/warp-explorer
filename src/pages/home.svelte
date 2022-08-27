@@ -23,7 +23,7 @@
     }
     const result = await readState(contractID);
     data = JSON.stringify(result, null, 2);
-    setTimeout(hljs.highlightAll, 100);
+    //setTimeout(hljs.highlightAll, 100);
 
     processDialog = false;
   }

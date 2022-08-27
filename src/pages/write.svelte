@@ -16,13 +16,13 @@
     input = mergeRight(input, JSON.parse(inputs));
     console.log(input);
     const result = await writeInteraction(contractID, input)
-      //.then((res) => omit([], res))
+      .then((res) => omit(["bundlrResponse"], res))
       .catch((e) => {
         console.log(e);
         return pick(["state", "result", "message"], e);
       });
     data = JSON.stringify(result, null, 2);
-    setTimeout(hljs.highlightAll, 100);
+    //setTimeout(hljs.highlightAll, 100);
     processDialog = false;
   }
 
@@ -36,8 +36,8 @@
       return e;
     });
     console.log(result);
-    data = JSON.stringify(pick(["id", "originalTxId"], result), null, 2);
-    setTimeout(hljs.highlightAll, 100);
+    data = JSON.stringify(result, null, 2);
+    //setTimeout(hljs.highlightAll, 100);
     processDialog = false;
   }
 

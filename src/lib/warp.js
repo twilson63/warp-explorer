@@ -5,7 +5,8 @@ const { of, fromPromise } = Async
 
 const arweave = window.Arweave.init({ host: 'arweave.net', port: 443, protocol: 'https' })
 const warp = window.warp.WarpWebFactory.memCached(arweave)
-const initWarp = contract => warp.contract(contract).connect('use_wallet').setEvaluationOptions({ internalWrites: true })
+const initWarp = contract => warp.contract(contract).connect('use_wallet')
+  .setEvaluationOptions({ internalWrites: true, allowUnsafeClient: true, allowBigInt: true })
 
 export const readState = (contract) => of(contract)
   .map(initWarp)
