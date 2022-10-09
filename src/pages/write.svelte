@@ -1,27 +1,32 @@
 <script>
   import Modal from "../components/modal.svelte";
-  import { hx } from "../store.js";
+  import { hx, profile } from "../store.js";
   import { take, takeLast, mergeRight, pick, omit } from "ramda";
-  import { writeInteraction, dryRun } from "../lib/warp.js";
+  import { readState, writeInteraction, dryRun } from "../lib/warp.js";
+  import Connect from "../dialogs/connect.svelte";
+  import WalletHelp from "../dialogs/wallet-help.svelte";
 
   export let contractID = "";
   let processDialog = false;
   let data = JSON.stringify({});
   let input = {};
   let inputs = "";
+  let showConnect = false;
+  let showHelp = false;
 
   async function write() {
     processDialog = true;
-    console.log(JSON.parse(inputs));
     input = mergeRight(input, JSON.parse(inputs));
-    console.log(input);
     const result = await writeInteraction(contractID, input)
       .then((res) => omit(["bundlrResponse"], res))
       .catch((e) => {
-        console.log(e);
         return pick(["state", "result", "message"], e);
       });
-    data = JSON.stringify(result, null, 2);
+    if (result.ok) {
+      data = JSON.stringify(await readState(contractID), null, 2);
+    } else {
+      data = JSON.stringify(result, null, 2);
+    }
     //setTimeout(hljs.highlightAll, 100);
     processDialog = false;
   }
@@ -44,11 +49,16 @@
   function links() {
     return $hx.map(
       (v, i) =>
-        `<a class="link" href="/write/${v}">[${take(4, v)}...${takeLast(
+        `<a class="link badge badge-outline no-underline" href="/write/${v}">${take(
           4,
           v
-        )}]</a>`
+        )}...${takeLast(4, v)}</a>`
     );
+  }
+
+  async function disconnect() {
+    await window.arweaveWallet.disconnect();
+    $profile = null;
   }
 </script>
 
@@ -61,6 +71,13 @@
   <div class="flex-none">
     <a class="btn btn-ghost" href="/">Read</a>
     <a class="btn btn-ghost" href="/write">Write</a>
+    {#if !$profile}
+      <button class="btn btn-ghost" on:click={() => (showConnect = true)}
+        >Connect</button
+      >
+    {:else}
+      <button class="btn btn-ghost" on:click={disconnect}>Disconnect</button>
+    {/if}
   </div>
 </nav>
 <main>
@@ -77,9 +94,10 @@
             placeholder="CONTRACT_ID"
             bind:value={contractID}
           />
-          <label class="label flex">
-            hx: {@html links()}
-          </label>
+          <div class="flex space-x-2 items-center">
+            <label class="label flex-none"> hx: </label>
+            {@html links()}
+          </div>
         </div>
         <div class="form-control">
           <input
@@ -120,3 +138,5 @@
 <Modal open={processDialog} ok={false}>
   <h3 class="text-xl">Running Interaction...</h3>
 </Modal>
+<Connect bind:open={showConnect} on:help={() => (showHelp = true)} />
+<WalletHelp bind:open={showHelp} />
