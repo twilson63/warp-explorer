@@ -16,7 +16,7 @@
       await arweaveWallet.disconnect();
       await arweaveWallet.connect(
         ["ACCESS_ADDRESS", "SIGN_TRANSACTION", "DISPATCH"],
-        { name: "img" }
+        { name: "warp explorer" }
       );
       const addr = await arweaveWallet.getActiveAddress();
       $profile = { addr };
@@ -30,7 +30,7 @@
   async function arwallet() {
     try {
       const wallet = new ArweaveWebWallet({
-        name: "img",
+        name: "warp explorer",
       });
       wallet.setUrl("arweave.app");
       await wallet.connect();
