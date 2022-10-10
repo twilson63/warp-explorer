@@ -12,12 +12,14 @@ const REDSTONE_GATEWAY = 'https://gateway.redstone.finance'
 const INTERACTION_PATH = 'gateway/sequencer/register'
 
 export const readState = (contract) => of(contract)
-  .bichain(
-    contract => initWarp(contract).chain(w => fromPromise(w.readState.bind(w))()),
+  .chain(
+
     fromPromise(contract => fetch(`${CACHE}/${contract}`).then(res => res.ok ? res.json() : Promise.reject(res)))
   )
-  // .map(initWarp)
-  // .chain(w => fromPromise(w.readState.bind(w))())
+  .bichain(
+    _ => fromPromise(() => initWarp(contract).readState())(),
+    of
+  )
   .toPromise()
 
 export const writeInteraction = (contract, input) => of(contract)
