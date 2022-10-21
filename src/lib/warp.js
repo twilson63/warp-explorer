@@ -4,7 +4,8 @@ import { assoc } from 'ramda'
 const { of, fromPromise } = Async
 
 const arweave = window.Arweave.init({ host: 'arweave.net', port: 443, protocol: 'https' })
-const warp = window.warp.WarpWebFactory.memCached(arweave)
+window.warp.LoggerFactory.INST.logLevel('error')
+const warp = window.warp.WarpFactory.forMainnet()
 const initWarp = contract => warp.contract(contract).connect('use_wallet')
   .setEvaluationOptions({ internalWrites: true, allowUnsafeClient: true, allowBigInt: true })
 const CACHE = 'https://cache.permapages.app'
