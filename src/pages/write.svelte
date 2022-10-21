@@ -13,10 +13,24 @@
   let inputs = "";
   let showConnect = false;
   let showHelp = false;
+  let inputData = [];
 
   async function write() {
     processDialog = true;
-    input = mergeRight(input, JSON.parse(inputs));
+
+    input = mergeRight(
+      input,
+      inputData.reduce((a, v) => {
+        console.log(v.type);
+        let value = v.value;
+        if (v.type === "number") {
+          value = Number(v.value);
+        } else if (v.type === "array") {
+          value = JSON.parse(v.value);
+        }
+        return { ...a, [v.key]: value };
+      }, {})
+    );
     const result = await writeInteraction(contractID, input)
       .then((res) => omit(["bundlrResponse"], res))
       .catch((e) => {
@@ -33,8 +47,19 @@
 
   async function dry() {
     processDialog = true;
-    console.log(JSON.parse(inputs));
-    input = mergeRight(input, JSON.parse(inputs));
+    input = mergeRight(
+      input,
+      inputData.reduce((a, v) => {
+        console.log(v.type);
+        let value = v.value;
+        if (v.type === "number") {
+          value = Number(v.value);
+        } else if (v.type === "array") {
+          value = JSON.parse(v.value);
+        }
+        return { ...a, [v.key]: value };
+      }, {})
+    );
     console.log(input);
     const result = await dryRun(contractID, input).catch((e) => {
       console.log(e);
@@ -107,6 +132,39 @@
             bind:value={input.function}
           />
         </div>
+        {#each inputData as item}
+          <div class="flex space-x-16">
+            <div class="form-control">
+              <label class="label">Type</label>
+              <select class="select select-bordered" bind:value={item.type}>
+                <option value="string">string</option>
+                <option value="number">number</option>
+                <option value="array">array</option>
+              </select>
+            </div>
+            <div class="form-control">
+              <label class="label">Key</label>
+              <input class="input input-bordered" bind:value={item.key} />
+            </div>
+            <div class="form-control">
+              <label class="label">Value</label>
+              <input
+                class="input input-bordered w-[600px]"
+                bind:value={item.value}
+              />
+            </div>
+          </div>
+        {/each}
+        <button
+          type="button"
+          class="btn"
+          on:click={() =>
+            (inputData = [
+              ...inputData,
+              { key: "", value: "", type: "string" },
+            ])}>Add Input</button
+        >
+        <!--
         <div class="form-control">
           <textarea
             class="textarea textarea-bordered"
@@ -115,6 +173,7 @@
           />
           <label class="label">JSON</label>
         </div>
+        -->
         <div class="">
           <button class="btn btn-primary">Write Interaction</button>
           <button type="button" on:click={dry} class="btn btn-secondary"
