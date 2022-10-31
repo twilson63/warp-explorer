@@ -26,11 +26,16 @@
     if (!$hx.includes(contractID)) {
       $hx = [...$hx, contractID];
     }
-    const result = await readState(contractID);
-    data = JSON.stringify(result, null, 2);
-    //setTimeout(hljs.highlightAll, 100);
+    try {
+      const result = await readState(contractID);
+      data = JSON.stringify(result, null, 2);
+      //setTimeout(hljs.highlightAll, 100);
 
-    processDialog = false;
+      processDialog = false;
+    } catch (e) {
+      processDialog = false;
+      alert(e.message);
+    }
   }
 
   function links() {

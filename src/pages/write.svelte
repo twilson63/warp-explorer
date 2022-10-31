@@ -31,18 +31,23 @@
         return { ...a, [v.key]: value };
       }, {})
     );
-    const result = await writeInteraction(contractID, input)
-      .then((res) => omit(["bundlrResponse"], res))
-      .catch((e) => {
-        return pick(["state", "result", "message"], e);
-      });
-    if (result.ok) {
-      data = JSON.stringify(await readState(contractID), null, 2);
-    } else {
-      data = JSON.stringify(result, null, 2);
+    try {
+      const result = await writeInteraction(contractID, input)
+        .then((res) => omit(["bundlrResponse"], res))
+        .catch((e) => {
+          return pick(["state", "result", "message"], e);
+        });
+      if (result.ok) {
+        data = JSON.stringify(await readState(contractID), null, 2);
+      } else {
+        data = JSON.stringify(result, null, 2);
+      }
+      //setTimeout(hljs.highlightAll, 100);
+      processDialog = false;
+    } catch (e) {
+      processDialog = false;
+      alert(e.message);
     }
-    //setTimeout(hljs.highlightAll, 100);
-    processDialog = false;
   }
 
   async function dry() {
@@ -61,14 +66,19 @@
       }, {})
     );
     console.log(input);
-    const result = await dryRun(contractID, input).catch((e) => {
-      console.log(e);
-      return e;
-    });
-    console.log(result);
-    data = JSON.stringify(result, null, 2);
-    //setTimeout(hljs.highlightAll, 100);
-    processDialog = false;
+    try {
+      const result = await dryRun(contractID, input).catch((e) => {
+        console.log(e);
+        return e;
+      });
+      console.log(result);
+      data = JSON.stringify(result, null, 2);
+      //setTimeout(hljs.highlightAll, 100);
+      processDialog = false;
+    } catch (e) {
+      processDialog = false;
+      alert(e.message);
+    }
   }
 
   function links() {
