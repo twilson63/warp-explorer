@@ -2,7 +2,7 @@
   import Modal from "../components/modal.svelte";
   import { hx, profile } from "../store.js";
   import { take, takeLast, mergeRight, pick, omit } from "ramda";
-  import { readState, writeInteraction, dryRun } from "../lib/warp.js";
+  import { readState, writeTx, dryRun } from "../lib/warp.js";
   import Connect from "../dialogs/connect.svelte";
   import WalletHelp from "../dialogs/wallet-help.svelte";
 
@@ -14,6 +14,7 @@
   let showConnect = false;
   let showHelp = false;
   let inputData = [];
+  let internal = "";
 
   async function write() {
     processDialog = true;
@@ -32,16 +33,17 @@
       }, {})
     );
     try {
-      const result = await writeInteraction(contractID, input)
+      const result = await writeTx(contractID, input, internal)
         .then((res) => omit(["bundlrResponse"], res))
         .catch((e) => {
           return pick(["state", "result", "message"], e);
         });
-      if (result.ok) {
-        data = JSON.stringify(await readState(contractID), null, 2);
-      } else {
-        data = JSON.stringify(result, null, 2);
-      }
+      // if (result.ok) {
+      //   data = JSON.stringify(await readState(contractID), null, 2);
+      // } else {
+      //   data = JSON.stringify(result, null, 2);
+      // }
+      data = JSON.stringify(result, null, 2);
       //setTimeout(hljs.highlightAll, 100);
       processDialog = false;
     } catch (e) {
@@ -140,6 +142,14 @@
             class="input input-bordered"
             placeholder="FUNCTION e.g. transfer, balance, mint, etc"
             bind:value={input.function}
+          />
+        </div>
+        <div class="form-control">
+          <input
+            type="text"
+            class="input input-bordered"
+            placeholder="(optional) internal write contract"
+            bind:value={internal}
           />
         </div>
         {#each inputData as item}
