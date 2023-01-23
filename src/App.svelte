@@ -5,6 +5,7 @@
 
   import Home from "./pages/home.svelte";
   import Write from "./pages/write.svelte";
+  import Balances from "./pages/balances.svelte";
 
   router.mode.hash();
   router.subscribe((_) => window.scrollTo(0, 0));
@@ -23,5 +24,8 @@
   </Route>
   <Route path="/write">
     <Write />
+  </Route>
+  <Route path="/balances">
+    <Balances />
   </Route>
 </Transition>

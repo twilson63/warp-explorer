@@ -108,6 +108,7 @@
   <div class="flex-none">
     <a class="btn btn-ghost" href="/">Read</a>
     <a class="btn btn-ghost" href="/write">Write</a>
+    <a class="btn btn-ghost" href="/balances">Balances</a>
     {#if !$profile}
       <button class="btn btn-ghost" on:click={() => (showConnect = true)}
         >Connect</button

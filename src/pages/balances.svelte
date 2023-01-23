@@ -1,33 +1,22 @@
 <script>
-  import { onMount } from "svelte";
-  import { readState } from "../lib/warp.js";
-  import { hx, profile } from "../store.js";
+  import { balances } from "../lib/warp.js";
+  import { profile } from "../store.js";
   import { take, takeLast } from "ramda";
   import Modal from "../components/modal.svelte";
   import Connect from "../dialogs/connect.svelte";
   import WalletHelp from "../dialogs/wallet-help.svelte";
 
-  export let contractID = "";
+  export let walletAddress = "";
 
   let data = JSON.stringify({}, null, 2);
   let processDialog = false;
   let showConnect = false;
   let showHelp = false;
 
-  //let hx = [];
-  onMount(async () => {
-    if (contractID.length > 0) {
-      await read();
-    }
-  });
-
   async function read() {
     processDialog = true;
-    if (!$hx.includes(contractID)) {
-      $hx = [...$hx, contractID];
-    }
     try {
-      const result = await readState(contractID);
+      const result = await balances(walletAddress);
       data = JSON.stringify(result, null, 2);
       //setTimeout(hljs.highlightAll, 100);
 
@@ -36,15 +25,6 @@
       processDialog = false;
       alert(e.message);
     }
-  }
-
-  function links() {
-    return $hx.map(
-      (v, i) => `
-<a class="link badge badge-outline no-underline" href="/read/${v}">
-  ${take(4, v)}...${takeLast(4, v)}
-</a>`
-    );
   }
 
   async function disconnect() {
@@ -82,15 +62,11 @@
               <input
                 type="text"
                 class="input input-bordered flex-1"
-                placeholder="CONTRACT_ID"
-                bind:value={contractID}
+                placeholder="WALLET_ADDRESS"
+                bind:value={walletAddress}
               />
-              <button class="btn">Read State</button>
+              <button class="btn">Get Balances</button>
             </div>
-          </div>
-          <div class="flex space-x-2 items-center">
-            <label class="label flex-none"> hx: </label>
-            {@html links()}
           </div>
         </div>
       </form>
@@ -107,7 +83,7 @@
   </section>
 </main>
 <Modal bind:open={processDialog} ok={false}>
-  <h3 class="text-xl">Reading Contract State...</h3>
+  <h3 class="text-xl">Balances...</h3>
 </Modal>
 <Connect bind:open={showConnect} on:help={() => (showHelp = true)} />
 <WalletHelp bind:open={showHelp} />

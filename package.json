@@ -1,5 +1,5 @@
 {
-  "name": "hypar-app",
+  "name": "warp-explorer",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,10 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "arkb deploy dist --use-bundler https://node2.bundlr.network --wallet wallet.json",
+    "deploy": "node deploy.mjs",
     "gen_wallet": "node scripts/wallet.js"
   },
   "devDependencies": {
+    "@bundlr-network/client": "^0.9.11",
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
     "@tailwindcss/typography": "^0.5.4",
     "arkb": "^1.1.60",
