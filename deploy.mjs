@@ -1,5 +1,5 @@
 import Bundlr from '@bundlr-network/client'
-import { WarpFactory, defaultCacheOptions } from 'warp-contracts'
+import { WarpFactory, defaultCacheOptions } from 'warp-contracts/mjs'
 import fs from 'fs'
 import Arweave from 'arweave'
 
