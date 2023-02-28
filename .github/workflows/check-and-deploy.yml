@@ -1,0 +1,64 @@
+name: 🚀 Check and Deploy Contract Explorer
+
+on:
+  push:
+    branches:
+      - "main"
+  # PRs trigger checks, but no deploy
+  pull_request: {}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
+
+      - name: ⬣ Lint
+        run: yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Run Tests
+        run: yarn test
+
+  publish:
+    # Only publish on main branch pushes, not as part of a PR
+    if: ${{ !github.event.pull_request }}
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
+
+      - name: 🛠 Build & Deploy
+        run: |
+          yarn build
+          yarn deploy
+        env:
+          ARNS: ${{ secrets.STAMP }}
