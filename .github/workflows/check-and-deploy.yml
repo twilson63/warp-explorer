@@ -36,6 +36,9 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
+
       - name: Run Tests
         run: yarn test
 
