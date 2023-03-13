@@ -63,6 +63,8 @@
           value = Number(v.value);
         } else if (v.type === "array") {
           value = JSON.parse(v.value);
+        } else if (v.type === "timestamp") {
+          value = Number(v.value);
         }
         return { ...a, [v.key]: value };
       }, {})
@@ -97,6 +99,7 @@
     await window.arweaveWallet.disconnect();
     $profile = null;
   }
+
 </script>
 
 <nav
@@ -157,10 +160,23 @@
           <div class="flex space-x-16">
             <div class="form-control">
               <label class="label">Type</label>
-              <select class="select select-bordered" bind:value={item.type}>
+              <select
+                class="select select-bordered"
+                bind:value={item.type}
+                on:change={() => {
+                  if (item.type === "timestamp") {
+                    item.key = "timestamp";
+                    item.value = Date.now();
+                  } else {
+                    item.key = "";
+                    item.value = "";
+                  }
+                }}
+              >
                 <option value="string">string</option>
                 <option value="number">number</option>
                 <option value="array">array</option>
+                <option value="timestamp">timestamp</option>
               </select>
             </div>
             <div class="form-control">
