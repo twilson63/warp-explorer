@@ -6,12 +6,12 @@ const warp = WarpFactory.forMainnet();
 // sync BAR to make contract evaluations fast
 warp
   .contract("VFr3Bk-uM-motpNNkkFg4lNW1BMmSfzqsVO551Ho4hA")
-  .syncState("https://cache.permapages.app/contract", { validity: true });
+  .syncState("https://cache-2.permaweb.tools/contract", { validity: true });
 
 export const readState = async (contract) => {
   await warp
     .contract(contract)
-    .syncState("https://cache.permapages.app/contract", { validity: true });
+    .syncState("https://cache-2.permaweb.tools/contract", { validity: true });
   return warp
     .contract(contract)
     .setEvaluationOptions({
@@ -26,7 +26,7 @@ export const readState = async (contract) => {
 export const writeTx = async (contract, input) => {
   await warp
     .contract(contract)
-    .syncState("https://cache.permapages.app/contract", { validity: true });
+    .syncState("https://cache-2.permaweb.tools/contract", { validity: true });
   return warp
     .contract(contract)
     .connect("use_wallet")
@@ -41,7 +41,7 @@ export const writeTx = async (contract, input) => {
 export const dryRun = async (contract, input) => {
   await warp
     .contract(contract)
-    .syncState("https://cache.permapages.app/contract", { validity: true });
+    .syncState("https://cache-2.permaweb.tools/contract", { validity: true });
   return warp
     .contract(contract)
     .connect("use_wallet")
