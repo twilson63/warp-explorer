@@ -6,17 +6,17 @@ const options = {
   allowBigInt: true,
   internalWrites: true,
   unsafeClient: "allow",
-}
+};
 // sync BAR to make contract evaluations fast
 warp
   .contract("VFr3Bk-uM-motpNNkkFg4lNW1BMmSfzqsVO551Ho4hA")
   .syncState("https://cache-2.permaweb.tools/contract", { validity: true })
-  .then(c => c.setEvaluationOptions(options).readState());
+  .then((c) => c.setEvaluationOptions(options).readState());
 
 warp
   .contract("61vg8n54MGSC9ZHfSVAtQp4WjNb20TaThu6bkQ86pPI")
   .syncState("https://cache-2.permaweb.tools/contract", { validity: true })
-  .then(c => c.setEvaluationOptions(options).readState());
+  .then((c) => c.setEvaluationOptions(options).readState());
 
 export const readState = async (contract) => {
   await warp
