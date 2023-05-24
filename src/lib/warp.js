@@ -1,4 +1,4 @@
-import { WarpFactory, LoggerFactory } from 'warp-contracts';
+import { WarpFactory, LoggerFactory } from "warp-contracts";
 
 LoggerFactory.INST.logLevel("error");
 const warp = WarpFactory.forMainnet();
