@@ -69,7 +69,7 @@
         return { ...a, [v.key]: value };
       }, {})
     );
-    console.log(input);
+
     try {
       const result = await dryRun(contractID, input).catch((e) => {
         console.log(e);
