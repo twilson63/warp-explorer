@@ -27,12 +27,13 @@
     "svelte": "^3.44.0",
     "tailwindcss": "^3.0.23",
     "tinro": "^0.6.12",
-    "vite": "^2.8.0",
-    "warp-contracts": "^1.4.8"
+    "vite": "^4.3.9"
   },
   "dependencies": {
     "arweave-wallet-connector": "^0.0.31",
     "crocks": "^0.12.4",
-    "ramda": "^0.28.0"
+    "ramda": "^0.28.0",
+    "warp-contracts": "^1.4.9",
+    "warp-contracts-plugin-deploy": "^1.0.8"
   }
 }

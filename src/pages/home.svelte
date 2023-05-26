@@ -13,6 +13,11 @@
   let processDialog = false;
   let showConnect = false;
   let showHelp = false;
+  let options = {
+    unsafeClient: "skip",
+    allowBigInt: true,
+    internalWrites: true,
+  };
 
   //let hx = [];
   onMount(async () => {
@@ -27,7 +32,7 @@
       $hx = [...$hx, contractID];
     }
     try {
-      const result = await readState(contractID);
+      const result = await readState(contractID, options);
       data = JSON.stringify(result, null, 2);
       //setTimeout(hljs.highlightAll, 100);
 
@@ -51,6 +56,7 @@
     await window.arweaveWallet.disconnect();
     $profile = null;
   }
+
 </script>
 
 <nav
@@ -84,6 +90,7 @@
                 class="input input-bordered flex-1"
                 placeholder="CONTRACT_ID"
                 bind:value={contractID}
+                required
               />
               <button class="btn">Read State</button>
             </div>
@@ -92,6 +99,39 @@
             <label class="label flex-none"> hx: </label>
             {@html links()}
           </div>
+        </div>
+        <div class="form-control w-1/2">
+          <label class="label">
+            <span class="label-text">Internal Writes</span>
+            <input
+              type="checkbox"
+              class="checkbox"
+              bind:checked={options.internalWrites}
+            />
+          </label>
+        </div>
+        <div class="form-control w-1/2">
+          <label class="label">
+            <span class="label-text">Allow Big Integer</span>
+            <input
+              type="checkbox"
+              class="checkbox"
+              bind:checked={options.allowBigInt}
+            />
+          </label>
+        </div>
+        <div class="form-control w-1/2">
+          <label class="label">
+            <span class="label-text">unsafeClient</span>
+            <select
+              class="select select-bordered"
+              bind:value={options.unsafeClient}
+            >
+              <option>skip</option>
+              <option>allow</option>
+              <option>none</option>
+            </select>
+          </label>
         </div>
       </form>
       <div class="">

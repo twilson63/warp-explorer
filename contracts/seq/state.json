@@ -1,0 +1,16 @@
+{
+  "name": "TebAR",
+  "pile": {},
+  "owner": "vh-NTHVvlKZqRxc8LyyTNok65yQ55a_PJ1zWLb9G2JI",
+  "ticker": "TebAR",
+  "balances": {},
+  "settings": [
+    [
+      "isTradeable",
+      true
+    ]
+  ],
+  "claimable": [],
+  "divisibility": 1000000,
+  "mint_contract": "hN0ZBIE8IelHLRyXaZc8BAmbLXxtGSp9pmg7Xb0T-TE"
+}

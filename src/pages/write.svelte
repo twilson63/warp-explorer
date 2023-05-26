@@ -14,7 +14,13 @@
   let showConnect = false;
   let showHelp = false;
   let inputData = [];
-  let internal = "";
+
+  let options = {
+    unsafeClient: "skip",
+    allowBigInt: true,
+    internalWrites: true,
+    useGateway: false,
+  };
 
   async function write() {
     processDialog = true;
@@ -33,7 +39,7 @@
       }, {})
     );
     try {
-      const result = await writeTx(contractID, input, internal)
+      const result = await writeTx(contractID, input, options)
         .then((res) => omit(["bundlrResponse"], res))
         .catch((e) => {
           return pick(["state", "result", "message"], e);
@@ -71,7 +77,7 @@
     );
 
     try {
-      const result = await dryRun(contractID, input).catch((e) => {
+      const result = await dryRun(contractID, input, options).catch((e) => {
         console.log(e);
         return e;
       });
@@ -148,14 +154,14 @@
             bind:value={input.function}
           />
         </div>
-        <div class="form-control">
+        <!-- <div class="form-control">
           <input
             type="text"
             class="input input-bordered"
             placeholder="(optional) internal write contract"
             bind:value={internal}
           />
-        </div>
+        </div> -->
         {#each inputData as item}
           <div class="flex space-x-16">
             <div class="form-control">
@@ -201,16 +207,49 @@
               { key: "", value: "", type: "string" },
             ])}>Add Input</button
         >
-        <!--
-        <div class="form-control">
-          <textarea
-            class="textarea textarea-bordered"
-            placeholder="Inputs e.g {`{ "target": "...", "qty": 12 } `} "
-            bind:value={inputs}
-          />
-          <label class="label">JSON</label>
+        <div class="form-control w-1/2">
+          <label class="label">
+            <span class="label-text">Use Arweave Gateway</span>
+            <input
+              type="checkbox"
+              class="checkbox"
+              bind:checked={options.useGateway}
+            />
+          </label>
         </div>
-        -->
+        <div class="form-control w-1/2">
+          <label class="label">
+            <span class="label-text">Internal Writes</span>
+            <input
+              type="checkbox"
+              class="checkbox"
+              bind:checked={options.internalWrites}
+            />
+          </label>
+        </div>
+        <div class="form-control w-1/2">
+          <label class="label">
+            <span class="label-text">Allow Big Integer</span>
+            <input
+              type="checkbox"
+              class="checkbox"
+              bind:checked={options.allowBigInt}
+            />
+          </label>
+        </div>
+        <div class="form-control w-1/2">
+          <label class="label">
+            <span class="label-text">unsafeClient</span>
+            <select
+              class="select select-bordered"
+              bind:value={options.unsafeClient}
+            >
+              <option>skip</option>
+              <option>allow</option>
+              <option>none</option>
+            </select>
+          </label>
+        </div>
         <div class="">
           <button class="btn btn-primary">Write Interaction</button>
           <button type="button" on:click={dry} class="btn btn-secondary"

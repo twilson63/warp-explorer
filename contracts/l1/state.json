@@ -1,0 +1,13 @@
+{
+  "name": "TebAR",
+  "owner": "vh-NTHVvlKZqRxc8LyyTNok65yQ55a_PJ1zWLb9G2JI",
+  "ticker": "tebAR",
+  "requests": [],
+  "settings": [
+    [
+      "isTradeable",
+      false
+    ]
+  ],
+  "divisibility": 1000000
+}

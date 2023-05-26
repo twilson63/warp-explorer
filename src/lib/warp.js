@@ -1,8 +1,9 @@
-import { WarpFactory, LoggerFactory } from "warp-contracts";
+import { WarpFactory, LoggerFactory, defaultCacheOptions } from "warp-contracts";
+import { omit } from 'ramda'
 
-LoggerFactory.INST.logLevel("error");
+LoggerFactory.INST.logLevel("debug");
 const warp = WarpFactory.forMainnet();
-const options = {
+const defaultOptions = {
   remoteStateSyncEnabled: true,
   allowBigInt: true,
   internalWrites: true,
@@ -19,15 +20,16 @@ const options = {
 //   .syncState("https://cache-2.permaweb.tools/contract", { validity: true })
 //   .then((c) => c.setEvaluationOptions(options).readState());
 
-export const readState = async (contract) => {
+export const readState = async (contract, options) => {
   return warp
     .contract(contract)
-    .setEvaluationOptions(options)
+    .setEvaluationOptions({ ...defaultOptions, ...options, remoteStateSyncEnabled: true })
     .readState()
+    .then(x => (console.log(x), x))
     .then((res) => res.cachedValue.state);
 };
 
-export const writeTx = async (contract, input) => {
+export const writeTx = async (contract, input, options) => {
   return warp
     .contract(contract)
     .connect("use_wallet")
@@ -35,11 +37,19 @@ export const writeTx = async (contract, input) => {
     .writeInteraction(input, { strict: true });
 };
 
-export const dryRun = async (contract, input) => {
+export const dryRun = async (contract, input, options) => {
+  if (options.useGateway) {
+    return WarpFactory.forMainnet(defaultCacheOptions, true)
+      .contract(contract)
+      .connect("use_wallet")
+      .setEvaluationOptions(omit(['useGateway'], options))
+      .dryWrite(input);
+
+  }
   return warp
     .contract(contract)
     .connect("use_wallet")
-    .setEvaluationOptions(options)
+    .setEvaluationOptions(omit(['useGateway'], options))
     .dryWrite(input);
 };
 
