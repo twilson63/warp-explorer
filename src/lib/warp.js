@@ -30,10 +30,18 @@ export const readState = async (contract, options) => {
 };
 
 export const writeTx = async (contract, input, options) => {
+  if (options.useGateway) {
+    return WarpFactory.forMainnet(defaultCacheOptions, true)
+      .contract(contract)
+      .connect("use_wallet")
+      .setEvaluationOptions(omit(['useGateway'], options))
+      .dryWrite(input);
+
+  }
   return warp
     .contract(contract)
     .connect("use_wallet")
-    .setEvaluationOptions(options)
+    .setEvaluationOptions(omit(['useGateway'], options))
     .writeInteraction(input, { strict: true });
 };
 
