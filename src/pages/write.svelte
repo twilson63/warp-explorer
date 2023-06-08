@@ -16,6 +16,7 @@
   let inputData = [];
 
   let options = {
+    remoteStateSyncEnabled: false,
     unsafeClient: "skip",
     allowBigInt: true,
     internalWrites: true,
@@ -81,7 +82,7 @@
         console.log(e);
         return e;
       });
-      console.log(result);
+
       data = JSON.stringify(result, null, 2);
       //setTimeout(hljs.highlightAll, 100);
       processDialog = false;
@@ -105,7 +106,6 @@
     await window.arweaveWallet.disconnect();
     $profile = null;
   }
-
 </script>
 
 <nav
@@ -214,6 +214,16 @@
               type="checkbox"
               class="checkbox"
               bind:checked={options.useGateway}
+            />
+          </label>
+        </div>
+        <div class="form-conntrol w-1/2">
+          <label class="label">
+            <span class="label"> RemoteStateSync Enabled </span>
+            <input
+              type="checkbox"
+              class="checkbox"
+              bind:checked={options.remoteStateSyncEnabled}
             />
           </label>
         </div>

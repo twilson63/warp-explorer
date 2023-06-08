@@ -14,6 +14,7 @@
   let showConnect = false;
   let showHelp = false;
   let options = {
+    remoteStateSyncEnabled: false,
     unsafeClient: "skip",
     allowBigInt: true,
     internalWrites: true,
@@ -56,7 +57,6 @@
     await window.arweaveWallet.disconnect();
     $profile = null;
   }
-
 </script>
 
 <nav
@@ -99,6 +99,16 @@
             <label class="label flex-none"> hx: </label>
             {@html links()}
           </div>
+        </div>
+        <div class="form-conntrol w-1/2">
+          <label class="label">
+            <span class="label"> RemoteStateSync Enabled </span>
+            <input
+              type="checkbox"
+              class="checkbox"
+              bind:checked={options.remoteStateSyncEnabled}
+            />
+          </label>
         </div>
         <div class="form-control w-1/2">
           <label class="label">

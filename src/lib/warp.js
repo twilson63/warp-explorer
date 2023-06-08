@@ -4,7 +4,7 @@ import { omit } from 'ramda'
 LoggerFactory.INST.logLevel("debug");
 const warp = WarpFactory.forMainnet();
 const defaultOptions = {
-  remoteStateSyncEnabled: true,
+  //remoteStateSyncEnabled: true,
   allowBigInt: true,
   internalWrites: true,
   unsafeClient: "skip",
@@ -23,7 +23,7 @@ const defaultOptions = {
 export const readState = async (contract, options) => {
   return warp
     .contract(contract)
-    .setEvaluationOptions({ ...defaultOptions, ...options, remoteStateSyncEnabled: true })
+    .setEvaluationOptions({ ...defaultOptions, ...options })
     .readState()
     .then(x => (console.log(x), x))
     .then((res) => res.cachedValue.state);
